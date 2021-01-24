@@ -602,7 +602,11 @@ def enableUserCerts(apkfile):
 		fh.close()
 		
 		#Rebuild and sign the APK
-		ret = runApkTool(["b", apkdir])
+		if os.path.exists(os.path.join(baseapkdir, "res", "navigation")) == True:
+			print("[+] Found res/navigation directory, rebuilding with 'apktool --use-aapt2'.")
+			ret = runApkTool(["--use-aapt2", "b", apkdir])
+		else:
+			ret = runApkTool(["b", apkdir])
 		if ret.returncode != 0:
 			print("Error: Failed to run 'apktool b " + apkdir + "'.\nRun with --debug-output for more information.")
 			sys.exit(1)
